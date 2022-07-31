@@ -28,7 +28,8 @@ def start(mess, res=False):#функцию можем называть как у
     bot.send_message(mess.chat.id, '<b>Привет, я главный бот, хочешь узнать, что я умею?"</b>',parse_mode='html')#Тело функции, которое выполняет основное действие
 bot.polling(none_stop=True, interval=0)
 
-Вроде бы написали, но нам программа при запуске выдаёт ошибку, что message_handler нету в TeleBot. Эта ошибка мало где объясняется.
+Вроде бы написали, но нам программа при запуске выдаёт ошибку, "def start(message): typeerror: nonetype object is not callable" 
+или что message_handler нету в TeleBot. Эта ошибка мало где объясняется.
 Ключевая суть заключается в том, что библиотеку pyTelegramBotAPI нужно еще скачать и оператор через настройки.
 File->Settings->project:'Название нашего проекта'- phython Interpritetor. В данной диоектории нажимаем на "+" над библиотеками 
 Вбиваем в поисковик "pyTelegramBotAPI" и скачиваем его. Всё, библиотека сидит в интерпритаторе и можно смело взаимодействовать 
@@ -40,4 +41,3 @@ bot = telebot.TeleBot('XXXXXXXXXX:CNF8B6dSokAeTlbrj6rSytGjPU_tHn9vQU')
 def start(mess, res=False):#функцию можем называть как угодно, это не играет роли
     bot.send_message(mess.chat.id, '<b>Привет, я главный бот, хочешь узнать, что я умею?"</b>',parse_mode='html')#Тело функции, которое выполняет основное действие
 bot.polling(none_stop=True, interval=0)
-
