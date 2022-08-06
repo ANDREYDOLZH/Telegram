@@ -1,0 +1,79 @@
+А этого бота мы научили заходить на википедию и оттуда брать информацию, оформили легкие переходы через команды, но сразу отмесу ключевой минус.
+Не отлажена система остановки модуля википедии. Так же он умеет считывать логи с отправленных пользователем сообщений и списывать их в файл, из минусов еще хлчется отметить что он
+плохо считывает данные других пользователей
+
+import telebot ,wikipedia, re
+import config
+from telebot import types
+WIKI=wikipedia.set_lang("ru")
+bot = telebot.TeleBot('5314976701:AAF4BMdSokOeTlcrj6rSytFjPU_tHn3XVQU')
+bot2 = telebot.TeleBot('5527271985:AAGMTqnEHiTeWCBCGaC8x3grQhY_LcZACYE')# токен я вставил
+features="html.parser"
+@bot.message_handler(commands=['start'])
+def start(mess, res=False):
+    bot.send_message(mess.chat.id, '<b>Привет, я главный бот, хочешь узнать, что я умею, напиши "/navigator"</b>',parse_mode='html')
+
+@bot.message_handler(commands=['navigator'])
+def help(m, res=False):
+    bot.send_message(m.chat.id,'Хорошо, что обратился, вот мой основной функционал:\n 1) "/start" - перезапуск меня\n 2) "/learn" - узнай полезную информацию\n 3)"/exit" - выйти из бота')
+    @bot.message_handler(commands=['exit'])
+    def start(messex, res=False):
+        bot.send_message(messex.chat.id, 'Хорошо, что обратился, вот мой основной функционал:\n 1) "/start" - перезапуск меня\n 2) "/learn" - узнай полезную информацию\n 3)"/exit" - выйти из бота')
+
+# Чистим текст статьи в Wikipedia и ограничиваем его тысячей символов
+def getwiki(s):
+    try:
+        ny = wikipedia.page(s)
+        # Получаем первую тысячу символов
+        wikitext = ny.content[:1000]
+        # Разделяем по точкам
+        wikimas = wikitext.split('.')
+        # Отбрасываем всЕ после последней точки
+        wikimas = wikimas[:-1]
+        # Создаем пустую переменную для текста
+        wikitext2 = ''
+        # Проходимся по строкам, где нет знаков «равно» (то есть все, кроме заголовков)
+        for x in wikimas:
+            if not ('==' in x):
+                # Если в строке осталось больше трех символов, добавляем ее к нашей переменной и возвращаем утерянные при разделении строк точки на место
+                if (len((x.strip())) > 3):
+                    wikitext2 = wikitext2 + x + '.'
+            else:
+                break
+        # Теперь при помощи регулярных выражений убираем разметку
+        wikitext2 = re.sub('\([^()]*\)', '', wikitext2)
+        wikitext2 = re.sub('\([^()]*\)', '', wikitext2)
+        wikitext2 = re.sub('\{[^\{\}]*\}', '', wikitext2)
+        # Возвращаем текстовую строку
+        return wikitext2
+    # Обрабатываем исключение, которое мог вернуть модуль wikipedia при запросе
+    except Exception as e:
+        return 'В энциклопедии нет информации об этом'
+
+
+
+# Функция, обрабатывающая команду /start
+@bot.message_handler(commands=["learn"])
+def learn(mis, res=False):
+    bot.send_message(mis.chat.id, 'Отправьте мне любое слово, и я найду его значение на Wikipedia')
+# Получение сообщений от юзера
+@bot.message_handler(func=lambda message: True, content_types=["text"])
+def handle_text(message):
+    if message.text=='/exit':
+        bot.send_message(message.chat.id,'Вы в главном меню, смотрите, что я умею:\n 1) "/start" - перезапуск меня:\n 2) "/learn" - узнай полезную информацию:\n 3)"/exit" - выйти из бота')
+
+    else:
+        bot2.send_message(message.chat.id, getwiki(message.text)+'\n\n\nЕсли вы хотите прекратить работу, то используйте функцию: "/exit"')
+        print(message)
+        #file_name=str('логи бота.txt')
+        file_name = 'C:/Users/Андрей/PycharmProjects/test_telegram_bot/'+str(message.from_user.last_name) + str(message.from_user.first_name)  + ".txt"
+        print(file_name)
+        f = open(file_name, 'a')
+    #f.write('\nФамилия пользователя: '+message.from_user.first_name+'\nИмя пользователя: '+message.from_user.first_name+'\nТекст сообзения: '+message.text+'\nНик пользователя:  '+message.from_user.username+'\nID пользователя:')
+        chat_ID=str(message.chat.id)
+        f.write('\nФамилия пользователя: ' + message.chat.last_name + '\nИмя пользователя: ' + message.chat.first_name + '\nТекст сообзения: ' + message.text + '\nНик пользователя:  ' + message.chat.username + '\nID пользователя:'+ chat_ID)
+        f.write('\n--------------------------------------------------------------------------')
+        f.close()
+
+
+bot.polling(none_stop=True, interval=0)
