@@ -1,0 +1,24 @@
+import telebot
+from telebot import types # для указание типов
+#import config #Для работы с конфигурациями
+token='55272ЧЧЧЧ5:AAшрыупшрушурпщфуожуфжщ_LcZACYE'
+bot = telebot.TeleBot(token) # токен лежит в файле config.py
+Тут мало что могу добавить, разве что мы поменяли количество кнопок
+
+
+@bot.message_handler(commands=['start'])
+def send_welcome(message: types.Message):
+    txt='Привет,'+message.chat.first_name+' '+message.chat.last_name+'! Я онлайн менеджер игрового клуба Картель\nЧем моу помочь?\n'
+    keyboard = types.InlineKeyboardMarkup()
+    callback_button = types.InlineKeyboardButton(text="Узнать о клубе", callback_data="start")
+    callback_button2 = types.InlineKeyboardButton(text="Наши игры", callback_data="start")
+    callback_button3 = types.InlineKeyboardButton(text="Цены", callback_data="start")
+    callback_button4 = types.InlineKeyboardButton(text="Записаться на игру", callback_data="start")
+    keyboard.add(callback_button),keyboard.add(callback_button2),keyboard.add(callback_button3),keyboard.add(callback_button4)
+    bot.send_photo(message.chat.id, open('лицо бота.jpg', 'rb'),caption=txt,reply_markup=keyboard)
+
+А тут поподробнее, мы изучили новую функцию "bot.send_photo", которая заставляет бота отправлять 
+фотографию, с помощью текстовой переменной  << txt='Привет,'+message.chat.first_name+' '+message.chat.last_name+'! Я онлайн менеджер игрового клуба Картель\nЧем моу помочь?\n, >> 
+которую мы задали вначале функции, бот будет выводить окно с фотографией и текстом под ней в одном блоке
+
+bot.polling(none_stop=True)
