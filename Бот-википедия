@@ -6,8 +6,8 @@ import telebot ,wikipedia, re
 import config
 from telebot import types
 WIKI=wikipedia.set_lang("ru")
-bot = telebot.TeleBot('5314976701:AAF4BMdSokOeTlcrj6rSytFjPU_tHn3XVQU')
-bot2 = telebot.TeleBot('5527271985:AAGMTqnEHiTeWCBCGaC8x3grQhY_LcZACYE')# токен я вставил
+bot = telebot.TeleBot('53149766601:AAF4Bytjsdghjkwt6ukQR4JKytFjPU_tHn3XVQU')
+bot2 = telebot.TeleBot('5527288665:AAGMTqnEHiTeWdtykrkC8x3grQhY_LcZACYE')# токен я вставил
 features="html.parser"
 @bot.message_handler(commands=['start'])
 def start(mess, res=False):
