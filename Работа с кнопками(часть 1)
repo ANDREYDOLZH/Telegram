@@ -1,0 +1,29 @@
+В данном разделе мы работаем с инлайновыми типами данными, то есть которые не находятся на клавиатуре для ввода
+И в данной работе будет представлен бот, который приветстует и под текстом выводит кнопку для ввода, но она не работает
+
+# -*- coding: cp1251 -*-
+import telebot
+from telebot import types # для указание типов
+import config #Для работы с конфигурациями
+token='552457895879985:AAGКПкупкупqnEHiTeWCBшфрзщЬКЗУРЩhY_LcZACYE'
+bot = telebot.TeleBot(token) # токен лежит в файле config.py
+
+
+На верху мы сделали подготовительные действия, внизу, внутри функции декоратора мы создаём переменную "keyboard"
+и призваеваем ей значение типа "types.InlineKeyboardMarkup()",
+А types.InlineKeyboardMarkup()-это  это более продвинутый вариант кнопок,
+за которыми скрыт дополнительный функционал. В данном случае кнопки прикрепляются непосредственно
+к сообщению от бота
+
+@bot.message_handler(commands=['start'])
+def send_welcome(message):
+    keyboard = types.InlineKeyboardMarkup()
+    callback_button = types.InlineKeyboardButton(text="Создать пароль", callback_data="start")
+    keyboard.add(callback_button)
+    bot.send_message(message.chat.id,'Привет! Я бот который поможет тебе придумать пароли\nДля начала нажми на кнопку ниже',reply_markup=keyboard)
+    
+    Создаём переменную  callback_button и присваиваем ей значение types.InlineKeyboardButton(21 строка)
+    Далее прописываем ей параметры следующие в скобках << (text="Создать пароль", callback_data="start")" >>
+    где text-это текст, который написан на кнопке, а callback_data="start" это расположение
+    
+bot.polling(none_stop=True)
