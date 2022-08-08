@@ -1,0 +1,73 @@
+# -*- coding: cp1251 -*-
+import telebot
+from telebot import types  # для указание типов
+#import config #Для работы с конфигурациями
+token = '552734634645:AAGMTыприырттрыBCGaC8x3grQhY_LcZACТИШЗТИЫТШЩ
+bot = telebot.TeleBot(token) # токен лежит в файле config.py
+
+@bot.message_handler(commands=['start'])
+def send_welcome(message: types.Message):
+    txt='Привет,'+message.from_user.first_name+'! Я онлайн менеджер игрового клуба Картель\n    Начнём работу?\n'
+    keyboard = types.InlineKeyboardMarkup()
+    start_button = types.InlineKeyboardButton(text="Да, поехали", callback_data="start_button")
+    keyboard.add(start_button)
+    bot.send_photo(message.chat.id, open('лицо бота.jpg', 'rb'),caption=txt,reply_markup=keyboard)
+
+@bot.callback_query_handler(func=lambda call: True)
+def callback_inline(call):
+    if call.data=="start_button":
+        txt = 'Привет,' + call.message.from_user.first_name + '! Я онлайн менеджер игрового клуба Картель\nЧем моу помочь?\n'
+        keyboard = types.InlineKeyboardMarkup()
+        callback_button = types.InlineKeyboardButton(text="Узнать о клубе", callback_data="callback_button")
+        callback_button2 = types.InlineKeyboardButton(text="Наши игры", callback_data="callback_button2")
+        callback_button3 = types.InlineKeyboardButton(text="Цены", callback_data="callback_button3")
+        callback_button4 = types.InlineKeyboardButton(text="Записаться на игру", callback_data="callback_button4")
+        callback_button5 = types.InlineKeyboardButton(text="Заказать игру", callback_data="callback_button5")
+        keyboard.add(callback_button),keyboard.add(callback_button2, callback_button3), keyboard.add(callback_button4,callback_button5)
+        bot.edit_message_caption(chat_id=call.message.chat.id,message_id=call.message.message_id,caption=txt,reply_markup=keyboard)
+
+    elif call.data == "callback_button":
+        txt2='Игровой клуб Картель - это захватывающие игры в городскую Мафию с большим количеством персонажей.\n - Игры как для опытных игроков, так и для новичков.\n - Различные настольные игры - Бункер, Бэнг, Пир Вампиров, Остров страха и многие другие, много позитива и положительных эмоций.\n - Организация корпоративов и развлекательных мероприятий любой сложности под ключ.\n - Дни рождения, тематические вечеринки для взрослых и детей.'
+        keyboard1 = types.InlineKeyboardMarkup()
+        info_btn1 = types.InlineKeyboardButton(text='записаться на игру', callback_data='fdhdhf')
+        info_btn2 = types.InlineKeyboardButton(text='главное меню', callback_data='start_button')
+        info_btn3 = types.InlineKeyboardButton(text='цены', callback_data='callback_button3')
+        keyboard1.add(info_btn1), keyboard1.add(info_btn2, info_btn3)
+        bot.edit_message_caption(chat_id=call.message.chat.id,message_id=call.message.message_id,caption=txt2,reply_markup=keyboard1)
+
+    elif call.data == "callback_button2":
+        txt3 = 'Тут у нас присутствуют Различные настольные игры - Бункер, Бэнг, Пир Вампиров, Остров страха и многие другие, много позитива и положительных эмоций'
+        keyboard2 = types.InlineKeyboardMarkup()
+        learn_btn = types.InlineKeyboardButton(text='Правила мафии(пока меню)', callback_data='start_button')
+        learn_btn2 = types.InlineKeyboardButton(text='Хочу поиграть', callback_data='callback_button4')
+        keyboard2.add( learn_btn, learn_btn2)
+        bot.edit_message_caption(chat_id=call.message.chat.id, message_id=call.message.message_id, caption=txt3,reply_markup=keyboard2)
+
+    elif call.data == "callback_button3":
+        txt3 = 'Цены у нас следующие:\n Игровой вечер(с 20.00 - 05.00) - 800 рублей\n Заказная игра - 5000 рублей на всё мероприятие\n Корпоративные - 9000 рублей на всё мероприятие'
+        keyboard3 = types.InlineKeyboardMarkup()
+        PYB_btn1 = types.InlineKeyboardButton(text='Хочу поиграть', callback_data='callback_button4')
+        PYB_btn2 = types.InlineKeyboardButton(text='Узнать о клубе', callback_data="callback_button")
+        PYB_btn3 = types.InlineKeyboardButton(text='Главное меню', callback_data='start_button')
+        keyboard3.add(PYB_btn1, PYB_btn2, PYB_btn3)
+        bot.edit_message_caption(chat_id=call.message.chat.id, message_id=call.message.message_id, caption=txt3,reply_markup=keyboard3)
+
+    elif call.data == "callback_button4":
+        txt4 = 'Очень рад, что решили прийти к нам поиграть,\n игры у нас проходят по пятницам и субботам с 20.00 по 05.00\n ПОКА В РАЗРАБОТКЕ, ТАК ЧТО КНОПКА НА ЗАПИСЬ ПЕРЕКИНЕТ В\n РАЗДЕЛ ЗАКАЗА ИГРЫ!!!!!'
+        keyboard4 = types.InlineKeyboardMarkup()
+        game_btn1 = types.InlineKeyboardButton(text='Заказать игру', callback_data="callback_button5")
+        game_btn2 = types.InlineKeyboardButton(text='Главное меню', callback_data='start_button')
+        keyboard4.add(game_btn1, game_btn2)
+        bot.edit_message_caption(chat_id=call.message.chat.id, message_id=call.message.message_id, caption=txt4,reply_markup=keyboard4)
+
+    elif call.data == "callback_button5":
+        txt5 = 'Очень рад, что решили заказать у нас игру,\n игры у нас проходят по пятницам и субботам с 20.00 по 05.00\n ПОКА В РАЗРАБОТКЕ, ТАК ЧТО КНОПКА НА ЗАПИСЬ ПЕРЕКИНЕТ В\n РАЗДЕЛ ЗАКАЗА ИГРЫ!!!!!'
+        keyboard5 = types.InlineKeyboardMarkup()
+        zak_btn1 = types.InlineKeyboardButton(text='Записаться на игру', callback_data="callback_button4")
+        zak_btn2 = types.InlineKeyboardButton(text='Главное меню', callback_data='start_button')
+        keyboard5.add(zak_btn1, zak_btn2)
+        bot.edit_message_caption(chat_id=call.message.chat.id, message_id=call.message.message_id, caption=txt5, reply_markup=keyboard5)
+
+bot.polling(none_stop=True, interval=0)
+if __name__ == '__main__':
+    bot.skip_pending = True
