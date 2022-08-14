@@ -1,0 +1,147 @@
+# -*- coding: cp1251 -*-
+import telebot
+from telebot import types  # для указание типов
+#import config #Для работы с конфигурациями
+token = 'феофкеофкеолфкелфеклкфлкфелллд'
+bot = telebot.TeleBot(token) # токен лежит в файле config.py
+
+@bot.message_handler(commands=['start'])
+def welkom(message: types.Message):
+    panel = types.ReplyKeyboardMarkup(row_width=2,resize_keyboard=True)
+    button1 = types.KeyboardButton(text="Основная информация")
+    button2 = types.KeyboardButton(text="Услуги")
+    button3 = types.KeyboardButton(text="Вопросы")
+    button4 = types.KeyboardButton(text="Поддержка")
+    #button_menu = types.KeyboardButton(text="Назад в меню")
+    panel.add(button1,button2,button3,button4)
+    bot.send_message(message.chat.id,'Привететствуем вас,' + message.from_user.first_name + 'в главном меню нашего портала\n',reply_markup=panel)
+    #print(message.text.panel.button1)
+
+#Тут мы создаём обработчик, который выводит реакцию нашего бота на каждое из нажатий кнопок раздела  "start", а так же меняет кнопки
+#в встраиваемой в панеле ввода клавиатуре ReplyKeyboardMarkup
+@bot.message_handler(content_types=['text'])
+def main_menu(message: types.Message):
+# 1-ые 4 условных оператора отвечают за обработку разделов 4-ёх основных кнопок в панеле ввода сообщений
+    if message.text == "Основная информация":#Кнопки отправляют текстовые сообщения, поэтому ведем их обработку через значие текста
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        back = types.KeyboardButton("Вернуться в главное меню")
+        markup.add(back)
+        bot.send_message(message.chat.id, text="Тут представленна основная информация о клубе, выберете подходящий раздел\n в диалоговом окне нашего клуба", reply_markup=markup)
+        keyboard = types.InlineKeyboardMarkup()
+        start_button = types.InlineKeyboardButton(text="Да, поехали", callback_data="start_button")
+        keyboard.add(start_button)
+        txt = 'Привет,' + message.from_user.first_name + '! Я онлайн менеджер игрового клуба Картель\n    Начнём работу?\n'
+        bot.send_photo(message.chat.id, open('лицо бота.jpg', 'rb'), caption=txt, reply_markup=keyboard)
+        #bot.send_message(message.chat.id,'',reply_markup=panel)
+    elif message.text == "Услуги":
+        #bot.send_message(message.chat.id, ' Вы перешли в раздел услуг, что мы можем вам предложить:\n -игра в клубе\n-заказать игру')
+        markup = types.ReplyKeyboardMarkup(row_width=1,resize_keyboard=True)
+        gamebutton1=types.KeyboardButton("Игры в клубе")
+        gamebutton2=types.KeyboardButton("Заказные игры")
+        back = types.KeyboardButton("Вернуться в главное меню")
+        markup.add(gamebutton1,gamebutton2,back)
+        bot.send_message(message.chat.id, text=' Вы перешли в раздел услуг, что мы можем вам предложить:\n -игра в клубе\n-заказать игру', reply_markup=markup)
+    elif message.text == "Вопросы":
+        bot.send_message(message.chat.id, ' Какие вас интересуют вопросы?')
+    elif message.text =="Поддержка":
+        bot.send_message(message.chat.id, 'Наши контакты:\n Телефон:89151817791\nПочта: ihfsf@gmail.com\n Сайт:aosidjosa.com\n группа в вконтакте: vk.com/cartel_life')
+
+
+#Тут находится блок обработки раздела "УСЛУГИ" из панели основного меню
+    elif message.text == "Игры в клубе":
+        markup2=types.ReplyKeyboardMarkup(row_width=1,resize_keyboard=True)
+        game_club_button1 = types.KeyboardButton("Вопросы по игре")
+        back = types.KeyboardButton("Вернуться в главное меню")
+        markup2.add(game_club_button1 , back)
+        bot.send_message(message.chat.id, 'Рад, что решили попробовать поиграть с нами, но навярняка у вас появились вопросы и я с радостью на них отвечу ', reply_markup=markup2)
+
+    elif message.text == "Вопросы по игре":
+        markup2 = types.ReplyKeyboardMarkup(row_width=3, resize_keyboard=True)
+        game_cl_button1 = types.KeyboardButton("Как и где проходят")
+        game_cl_button2 = types.KeyboardButton("Сложность игр")
+        game_cl_button3 = types.KeyboardButton("В какие игры играем")
+        back = types.KeyboardButton("Вернуться в главное меню")
+        markup2.add(game_cl_button1, game_cl_button2,game_cl_button3),markup2.add(back)
+        bot.send_message(message.chat.id, 'Рад, что решили попробовать поиграть с нами, но навярняка у вас появились вопросы и я с радостью на них отвечу ', reply_markup=markup2)
+
+    elif message.text == "Как и где проходят":
+        markup2 = types.ReplyKeyboardMarkup(row_width=3, resize_keyboard=True)
+        game_cl_button1 = types.KeyboardButton("Как и где проходят")
+        game_cl_button2 = types.KeyboardButton("Сложность игр")
+        game_cl_button3 = types.KeyboardButton("В какие игры играем")
+        back = types.KeyboardButton("Вернуться в главное меню")
+        markup2.add(game_cl_button1, game_cl_button2,game_cl_button3),markup2.add(back)
+        bot.send_message(message.chat.id, 'Мы в основном играем в кафе, арендуем столик с собственныи официантом,\n еда и игровой вечер оплачиваются отдельно ', reply_markup=markup2)
+
+    elif message.text == "В какие игры играем":
+        markup2 = types.ReplyKeyboardMarkup(row_width=3, resize_keyboard=True)
+        game_cli_button1 = types.KeyboardButton("Как и где проходят")
+        game_cli_button2 = types.KeyboardButton("Сложность игр")
+        game_cli_button3 = types.KeyboardButton("В какие игры играем")
+        back = types.KeyboardButton("Вернуться в главное меню")
+        markup2.add(game_cli_button1, game_cli_button2,game_cli_button3),markup2.add(back)
+        bot.send_message(message.chat.id, 'В основном мы специализируемся на мафии, но иногда можем поиграть и в другие', reply_markup=markup2)
+
+    elif message.text == "Сложность игр":
+        markup2 = types.ReplyKeyboardMarkup(row_width=3, resize_keyboard=True)
+        game_cli_button1 = types.KeyboardButton("Как и где проходят")
+        game_cli_button2 = types.KeyboardButton("Сложность игр")
+        game_cli_button3 = types.KeyboardButton("В какие игры играем")
+        back = types.KeyboardButton("Вернуться в главное меню")
+        markup2.add(game_cli_button1, game_cli_button2,game_cli_button3),markup2.add(back)
+        bot.send_message(message.chat.id, 'Правила наших игр не такие уж и сложные, мы всегда поможем и подскажем. У нас доброжелательная обстановка\n и если у вас что-то не получается, то наша команда ведущих и более опытных игроков\n всегда поможет войти вам в курс дела', reply_markup=markup2)
+
+#Раздел для обработки кнопок с возвращением в главное меню
+    elif message.text == "Вернуться в главное меню":
+        panel = types.ReplyKeyboardMarkup(row_width=2, resize_keyboard=True)
+        button1 = types.KeyboardButton(text="Основная информация")
+        button2 = types.KeyboardButton(text="Услуги")
+        button3 = types.KeyboardButton(text="Вопросы")
+        button4 = types.KeyboardButton(text="Поддержка")
+        # button_menu = types.KeyboardButton(text="Назад в меню")
+        panel.add(button1, button2, button3, button4)
+        bot.send_message(message.chat.id, message.from_user.first_name + 'Вы вернулись в главное меню, начнём работу?\n', reply_markup=panel)
+
+
+@bot.callback_query_handler(func=lambda call: True)
+def callback_inline(call):
+    if call.data=="start_button":
+        txt = 'Привет,' + call.message.from_user.first_name + '! Вы перешли в раздел-визитку нашего клуба\nЧем можем помочь?\n'
+        keyboard = types.InlineKeyboardMarkup()
+        callback_button = types.InlineKeyboardButton(text="Общая информация", callback_data="callback_button")
+        callback_button2 = types.InlineKeyboardButton(text="Наши игры", callback_data="callback_button2")
+        callback_button3 = types.InlineKeyboardButton(text="Цены", callback_data="callback_button3")
+        keyboard.add(callback_button),keyboard.add(callback_button2, callback_button3)
+        bot.edit_message_caption(chat_id=call.message.chat.id,message_id=call.message.message_id,caption=txt,reply_markup=keyboard)
+
+    elif call.data == "callback_button":
+        txt2='Игровой клуб Картель - это захватывающие игры в городскую Мафию с большим количеством персонажей.\n - Игры как для опытных игроков, так и для новичков.\n - Различные настольные игры - Бункер, Бэнг, Пир Вампиров, Остров страха и многие другие, много позитива и положительных эмоций.\n - Организация корпоративов и развлекательных мероприятий любой сложности под ключ.\n - Дни рождения, тематические вечеринки для взрослых и детей.'
+        keyboard1 = types.InlineKeyboardMarkup()
+        info_btn2 = types.InlineKeyboardButton(text='главное меню', callback_data='start_button')
+        info_btn3 = types.InlineKeyboardButton(text='цены', callback_data='callback_button3')
+        keyboard1.add(info_btn2, info_btn3)
+        bot.edit_message_caption(chat_id=call.message.chat.id,message_id=call.message.message_id,caption=txt2,reply_markup=keyboard1)
+
+    elif call.data == "callback_button2":
+        txt3 = 'Тут у нас присутствуют Различные настольные игры - Бункер, Бэнг, Пир Вампиров, Остров страха и многие другие, много позитива и положительных эмоций'
+        keyboard2 = types.InlineKeyboardMarkup()
+        learn_btn = types.InlineKeyboardButton(text='назад', callback_data='start_button')
+        keyboard2.add( learn_btn)
+        bot.edit_message_caption(chat_id=call.message.chat.id, message_id=call.message.message_id, caption=txt3,reply_markup=keyboard2)
+
+    elif call.data == "callback_button3":
+        txt4 = 'Цены у нас следующие:\n Игровой вечер(с 20.00 - 05.00) - 800 рублей\n Заказная игра - 5000 рублей на всё мероприятие\n Корпоративные - 9000 рублей на всё мероприятие'
+        keyboard3 = types.InlineKeyboardMarkup()
+        PYB_btn2 = types.InlineKeyboardButton(text='Узнать о клубе', callback_data="callback_button")
+        PYB_btn3 = types.InlineKeyboardButton(text='Главное меню', callback_data='start_button')
+        keyboard3.add(PYB_btn2, PYB_btn3)
+        bot.edit_message_caption(chat_id=call.message.chat.id, message_id=call.message.message_id, caption=txt4,reply_markup=keyboard3)
+
+
+
+
+
+
+bot.polling(none_stop=True, interval=0)
+if __name__ == '__main__':
+    bot.skip_pending = True
